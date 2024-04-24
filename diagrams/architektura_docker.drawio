@@ -1,0 +1,60 @@
+<mxfile host="Electron" modified="2024-04-24T11:35:09.781Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.1.0 Chrome/120.0.6099.109 Electron/28.1.0 Safari/537.36" etag="JF9OJNULMncTgMNn3TXC" version="24.1.0" type="device">
+  <diagram name="Strona-1" id="2ZppeSoiIfE6H7o7fYgK">
+    <mxGraphModel dx="954" dy="727" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="#ffffff" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="7Bt4KtoVOsmTnt3ndda_-1" value="Docker" style="swimlane;whiteSpace=wrap;html=1;fillColor=#1ba1e2;fontColor=#ffffff;strokeColor=#006EAF;" vertex="1" parent="1">
+          <mxGeometry x="33" y="41" width="703" height="424" as="geometry">
+            <mxRectangle x="37" y="41" width="73" height="26" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7Bt4KtoVOsmTnt3ndda_-15" value="&lt;b&gt;Python3 API&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;strokeColor=#006EAF;strokeWidth=3;fontColor=#ffffff;fillColor=#1ba1e2;" vertex="1" parent="7Bt4KtoVOsmTnt3ndda_-1">
+          <mxGeometry x="542" y="264" width="140" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="7Bt4KtoVOsmTnt3ndda_-16" value="&lt;font color=&quot;#000000&quot;&gt;1. randomizacja danych&lt;/font&gt;&lt;div&gt;&lt;font color=&quot;#000000&quot;&gt;2. udostępnianie - Endpoint&lt;/font&gt;&lt;/div&gt;" style="text;strokeColor=none;fillColor=#FFFFFF;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="7Bt4KtoVOsmTnt3ndda_-15">
+          <mxGeometry y="30" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="7Bt4KtoVOsmTnt3ndda_-19" value="&lt;b&gt;PostgreSQL&lt;/b&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="7Bt4KtoVOsmTnt3ndda_-1">
+          <mxGeometry x="65" y="227" width="102" height="123" as="geometry" />
+        </mxCell>
+        <mxCell id="7Bt4KtoVOsmTnt3ndda_-27" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#000000;startArrow=classic;startFill=1;" edge="1" parent="7Bt4KtoVOsmTnt3ndda_-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="533" y="310" as="sourcePoint" />
+            <mxPoint x="437" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7Bt4KtoVOsmTnt3ndda_-28" value="&lt;b&gt;Spark (PySpark)&lt;/b&gt;" style="swimlane;fontStyle=0;childLayout=stackLayout;horizontal=1;startSize=30;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;whiteSpace=wrap;html=1;strokeColor=#006EAF;strokeWidth=3;fontColor=#ffffff;fillColor=#1ba1e2;" vertex="1" parent="7Bt4KtoVOsmTnt3ndda_-1">
+          <mxGeometry x="287.5" y="273" width="140" height="65" as="geometry" />
+        </mxCell>
+        <mxCell id="7Bt4KtoVOsmTnt3ndda_-29" value="&lt;font color=&quot;#000000&quot;&gt;1. streaming danych&lt;/font&gt;" style="text;strokeColor=none;fillColor=#FFFFFF;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="7Bt4KtoVOsmTnt3ndda_-28">
+          <mxGeometry y="30" width="140" height="35" as="geometry" />
+        </mxCell>
+        <mxCell id="7Bt4KtoVOsmTnt3ndda_-32" value="&lt;b&gt;Python3&lt;/b&gt;&lt;br&gt;Dashboard App (flask / django)" style="ellipse;whiteSpace=wrap;html=1;align=center;newEdgeStyle={&quot;edgeStyle&quot;:&quot;entityRelationEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;,&quot;segment&quot;:10,&quot;curved&quot;:1,&quot;sourcePerimeterSpacing&quot;:0,&quot;targetPerimeterSpacing&quot;:0};treeFolding=1;treeMoving=1;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="7Bt4KtoVOsmTnt3ndda_-1">
+          <mxGeometry x="223" y="57" width="269" height="101" as="geometry" />
+        </mxCell>
+        <mxCell id="7Bt4KtoVOsmTnt3ndda_-33" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#000000;exitX=0.765;exitY=0.016;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="7Bt4KtoVOsmTnt3ndda_-1" source="7Bt4KtoVOsmTnt3ndda_-19">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="163" y="254" as="sourcePoint" />
+            <mxPoint x="267" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7Bt4KtoVOsmTnt3ndda_-31" value="" style="endArrow=classic;html=1;rounded=0;strokeWidth=2;strokeColor=#000000;" edge="1" parent="7Bt4KtoVOsmTnt3ndda_-1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="272" y="308.5" as="sourcePoint" />
+            <mxPoint x="176" y="308.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="7Bt4KtoVOsmTnt3ndda_-34" value="&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#000000&quot;&gt;JSON&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="7Bt4KtoVOsmTnt3ndda_-1">
+          <mxGeometry x="460" y="283" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7Bt4KtoVOsmTnt3ndda_-35" value="&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#000000&quot;&gt;INSERT&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="7Bt4KtoVOsmTnt3ndda_-1">
+          <mxGeometry x="200" y="283" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="7Bt4KtoVOsmTnt3ndda_-36" value="&lt;font style=&quot;font-size: 11px;&quot; color=&quot;#000000&quot;&gt;FETCH&lt;/font&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;spacingLeft=4;spacingRight=4;overflow=hidden;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;rotatable=0;whiteSpace=wrap;html=1;" vertex="1" parent="7Bt4KtoVOsmTnt3ndda_-1">
+          <mxGeometry x="154" y="163" width="78" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

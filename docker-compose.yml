@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  postgres_dashboard_one:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: Pa$$word_postgresDB@12083
+    ports:
+      - "5435:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - dashboard_one
+
+  python_scripts_one:
+    image: python:3.10
+    ports:
+      - "5100:5000" #przekierowaniu portu 5000 z kontenera na 5100 hosta
+    volumes:
+      - ./python_scripts:/usr/src/app
+    working_dir: /usr/src/app
+    command: python random_data.py  #skrypt randomizujący dane
+    networks:
+      - dashboard_one
+
+  python_dashboard_one:
+    image: python:3.10
+    ports:
+      - "8900:5000" #przekierowaniu portu 5000 z kontenera na 8900 hosta
+    volumes:
+      - ./dashboard:/usr/src/app
+    working_dir: /usr/src/app
+    command: python dasboard.py  #skrypt dashboardu
+    environment:
+      - FLASK_ENV=development
+    networks:
+      - dashboard_one
+
+  spark_dashboard_one:
+    image: bitnami/spark:3.5.0
+    ports:
+      - "8085:8080"  #Spark Web UI
+    environment:
+      - SPARK_MODE=master
+      - SPARK_RPC_AUTHENTICATION_ENABLED=no
+      - SPARK_RPC_ENCRYPTION_ENABLED=no
+      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
+      - SPARK_SSL_ENABLED=no
+      - SPARK_USER=spark
+      - SPARK_WORK_DIR=/usr/src/app
+    volumes:
+      - ./spark:/usr/src/app
+    networks:
+      - dashboard_one
+
+volumes:
+  postgres_data: {}
+
+#wewnętrzna sieć dla docker compose
+networks:
+  dashboard_one:
+    driver: bridge
