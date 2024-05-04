@@ -34,7 +34,7 @@ services:
         ipv4_address: 172.18.0.3
 
   kafka_one:
-    image: 'bitnami/kafka:latest'
+    image: ./kafka/Dockerfile
     container_name: kafka
     hostname: kafka
     ports:
@@ -47,16 +47,17 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
       - zookeeper
-    volumes:
-      - ../streamingProje:/home
     networks:
       dashboard_one:
         ipv4_address: 172.18.0.4
 
   cassandra_one:
-    image: 'bitnami/cassandra:latest'
+    image: ./cassandra/Dockerfile
     container_name: cassandra
     hostname: cassandra
+    environment:
+      - CASSANDRA_START_RPC=true
+      - CASSANDRA_CLUSTER_NAME=cassandra_dashboard_one
     ports:
       - '9042:9042'
     volumes:
@@ -69,7 +70,7 @@ services:
   dashboard_one:
     image: python:3.10
     ports:
-      - "8900:5000" #przekierowaniu portu 5000 z kontenera na 8900 hosta
+      - "8900:5000"
     volumes:
       - ./dashboard:/usr/src/app
     working_dir: /usr/src/app
@@ -81,7 +82,7 @@ services:
   flask_one:
     image: python:3.10
     ports:
-      - "5100:5000" #przekierowaniu portu 5000 z kontenera na 5100 hosta
+      - "5100:5000"
     volumes:
       - ./python_scripts:/usr/src/app
     working_dir: /usr/src/app
