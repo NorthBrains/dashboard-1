@@ -82,7 +82,7 @@ services:
   flask_one:
     image: python:3.10
     ports:
-      - "5100:5000"
+      - "5001:5000"
     volumes:
       - ./python_scripts:/usr/src/app
     working_dir: /usr/src/app
