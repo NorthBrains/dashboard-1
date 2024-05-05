@@ -22,7 +22,8 @@ services:
         ipv4_address: 172.18.0.2
 
   zookeeper_one:
-    image: 'bitnami/zookeeper:latest'
+    restart: always
+    image: 'bitnami/zookeeper:3.5.9'
     container_name: zookeeper
     hostname: zookeeper
     ports:
@@ -34,7 +35,7 @@ services:
         ipv4_address: 172.18.0.3
 
   kafka_one:
-    image: ./kafka/Dockerfile
+    image: ./kafka
     container_name: kafka
     hostname: kafka
     ports:
@@ -52,7 +53,7 @@ services:
         ipv4_address: 172.18.0.4
 
   cassandra_one:
-    image: ./cassandra/Dockerfile
+    image: ./cassandra
     container_name: cassandra
     hostname: cassandra
     environment:
@@ -80,13 +81,12 @@ services:
         ipv4_address: 172.18.0.6
 
   flask_one:
-    image: python:3.10
+    image: ./api_flask
     ports:
       - "5001:5000"
     volumes:
       - ./python_scripts:/usr/src/app
     working_dir: /usr/src/app
-    command: python random_data.py
     environment:
       - FLASK_ENV=development
     networks:
