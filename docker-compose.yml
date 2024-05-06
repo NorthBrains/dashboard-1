@@ -35,7 +35,7 @@ services:
         ipv4_address: 172.18.0.3
 
   kafka_one:
-    image: ./kafka
+    image: ./kafka/Dockerfile
     container_name: kafka
     hostname: kafka
     ports:
@@ -53,7 +53,7 @@ services:
         ipv4_address: 172.18.0.4
 
   cassandra_one:
-    image: ./cassandra
+    image: ./cassandra/Dockerfile
     container_name: cassandra
     hostname: cassandra
     environment:
@@ -81,7 +81,7 @@ services:
         ipv4_address: 172.18.0.6
 
   flask_one:
-    image: ./api_flask
+    image: ./api_flask/Dockerfile
     ports:
       - "5001:5000"
     volumes:
