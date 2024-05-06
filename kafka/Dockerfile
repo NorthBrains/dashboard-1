@@ -2,10 +2,14 @@ FROM bitnami/kafka:latest
 
 USER root
 
-COPY ./init_kafka/init.sh /docker-entrypoint-init.d/
+RUN mkdir /scipts
 
-RUN chmod 777 /docker-entrypoint-init.d/init.sh
+COPY /init_kafka /scipts
+
+RUN chmod 777 /scipts/init.sh
 
 USER 1001
 
-ENTRYPOINT [ "/bin/bash" ]
+CMD ["./scipts/init.sh"]
+
+ENTRYPOINT [ "/opt/bitnami/scripts/kafka/run.sh" ]

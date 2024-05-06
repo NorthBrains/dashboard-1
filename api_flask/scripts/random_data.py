@@ -17,7 +17,7 @@ products = [
 
 #inicjowanie producera Kafki
 producer = KafkaProducer(
-    bootstrap_servers='172.18.0.4:9092',
+    bootstrap_servers='172.20.0.4:9092',
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
