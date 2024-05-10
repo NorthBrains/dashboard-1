@@ -1,4 +1,0 @@
-kafka-python
-flask
-flask_cors
-jsonify

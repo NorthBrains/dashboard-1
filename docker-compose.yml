@@ -1,64 +1,79 @@
 version: '3.8'
 
-services:  
-  spark_one:
-    image: docker.io/bitnami/spark:3
-    container_name: spark_one
-    hostname: spark_one
-    user: root
-    environment:
-      - SPARK_MODE=master
-      - SPARK_RPC_AUTHENTICATION_ENABLED=no
-      - SPARK_RPC_ENCRYPTION_ENABLED=no
-      - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
-      - SPARK_SSL_ENABLED=no
+services:
+  spark_master_one:
+    image: bitnami/spark:3.5.1
+    container_name: spark_master_one
     ports:
-      - '8085:8080'
+      - "8190:8080"
+      - "7077:7077"
+    environment:
+      SPARK_UI_PORT: 8080
+      SPARK_MODE: master
+      SPARK_RPC_AUTHENTICATION_ENABLED: no
+      SPARK_RPC_ENCRYPTION_ENABLED: no
+      SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED: no
+      SPARK_SSL_ENABLED: no
     volumes:
-      - ./spark/jars:/opt/bitnami/spark/ivy:z
       - ./spark/scripts:/opt/bitnami/spark/scripts
     networks:
       dashboard_one:
-        ipv4_address: 172.20.0.2
+        ipv4_address: 172.30.0.2
 
-  zookeeper_one:
-    restart: always
-    image: 'bitnami/zookeeper:3.5.9'
-    container_name: zookeeper_one
-    hostname: zookeeper_ondock
-    ports:
-      - '2181:2181'
+  spark_worker_one:
+    image: bitnami/spark:3.5.1
+    container_name: spark_worker_one
     environment:
-      - ALLOW_ANONYMOUS_LOGIN=yes
+      SPARK_MODE: worker
+      SPARK_MASTER_URL: spark://172.30.0.2:7077
+      SPARK_WORKER_CORES: 1
+      SPARK_WORKER_MEMORY: 1G
+      SPARK_RPC_AUTHENTICATION_ENABLED: no
+      SPARK_RPC_ENCRYPTION_ENABLED: no
+      SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED: no
+      SPARK_SSL_ENABLED: no
+    volumes:
+      - ./spark/scripts:/opt/bitnami/spark/scripts
     networks:
       dashboard_one:
-        ipv4_address: 172.20.0.3
+        ipv4_address: 172.30.0.3
+
+  zookeeper_one:
+    image: zookeeper:3.5.9
+    container_name: zookeeper_one
+    ports:
+      - "2181:2181"
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=172.30.0.3:2888:3888;2181
+      ZOO_PORT: 2181
+    networks:
+      dashboard_one:
+        ipv4_address: 172.30.0.4
 
   kafka_one:
-    build: ./kafka
+    image: confluentinc/cp-kafka:7.5.0
     container_name: kafka_one
-    hostname: kafka_one
     ports:
-      - '9092:9092'
+      - "9092:9092"
     environment:
-      - KAFKA_BROKER_ID=1
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092
-      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
-      - ALLOW_PLAINTEXT_LISTENER=yes
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 172.30.0.4:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.30.0.5:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     depends_on:
       - zookeeper_one
     networks:
       dashboard_one:
-        ipv4_address: 172.20.0.4
+        ipv4_address: 172.30.0.5
 
   cassandra_one:
     build: ./cassandra
     container_name: cassandra_one
     hostname: cassandra_one
     environment:
-      - CASSANDRA_START_RPC=true
-      - CASSANDRA_CLUSTER_NAME=cassandra_dashboard_one
+      CASSANDRA_START_RPC: true
+      CASSANDRA_CLUSTER_NAME: cassandra_dashboard_one
     ports:
       - '9042:9042'
     volumes:
@@ -66,7 +81,18 @@ services:
       - cassandra_logs:/var/log/cassandra
     networks:
       dashboard_one:
-        ipv4_address: 172.20.0.5
+        ipv4_address: 172.30.0.6
+
+  api_python:
+    build: ./api_python
+    container_name: api_one
+    hostname: api_one
+    depends_on:
+      - kafka_one
+      - zookeeper_one
+    networks:
+      dashboard_one:
+        ipv4_address: 172.30.0.7
 
   dashboard_one:
     build: ./dashboard
@@ -74,39 +100,19 @@ services:
     hostname: dashboard_one
     ports:
       - "8900:5000"
-    # volumes:
-    #   - ./dashboard:/usr/src/app
-    working_dir: /usr/src/app
-    command: python dashboard.py
     networks:
       dashboard_one:
-        ipv4_address: 172.20.0.6
+        ipv4_address: 172.30.0.8
 
-  flask_one:
-    build: ./api_flask
-    container_name: flask_one
-    hostname: flask_one
-    ports:
-      - "5001:5000"
-    # volumes:
-    #   - ./python_scripts:/usr/src/app
-    working_dir: /usr/src/app
-    environment:
-      - FLASK_ENV=development
-    depends_on:
-      - kafka_one
-    networks:
-      dashboard_one:
-        ipv4_address: 172.20.0.7
 
 volumes:
   cassandra_data: {}
   cassandra_logs: {}
 
 networks:
-    dashboard_one:
-        driver: bridge
-        ipam:
-            driver: default
-            config:
-                - subnet: "172.20.0.0/16"
+  dashboard_one:
+    driver: bridge
+    ipam:
+        driver: default
+        config:
+          - subnet: "172.30.0.0/16"

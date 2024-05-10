@@ -2,4 +2,4 @@
 set -e
 
 #wytworzenie keyspace w Cassandrze (if not exists)
-cqlsh -u cassandra -p cassandra -f /docker-entrypoint-initdb.d/init.cql
+cqlsh -u cassandra -p cassandra -f /initdb/init.cql
