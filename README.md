@@ -1,4 +1,4 @@
 # dashboard-1
 <br>
-<img src=./images/docker_containers.png>
+<img src=./diagrams/docker_containers.png>
 <br>
