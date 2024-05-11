@@ -68,7 +68,7 @@ services:
         ipv4_address: 172.30.0.5
 
   cassandra_one:
-    build: ./cassandra
+    build: ./cassandraśś
     container_name: cassandra_one
     hostname: cassandra_one
     environment:

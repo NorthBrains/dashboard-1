@@ -4,7 +4,7 @@ CREATE KEYSPACE IF NOT EXISTS products_data WITH replication = {'class':'SimpleS
 -- Create 'data' table in 'products_data' keyspace
 CREATE TABLE IF NOT EXISTS products_data.data (
     record_id uuid PRIMARY KEY,
-    id int,
+    id int,ś
     category text,
     subcategories text,
     product text,
