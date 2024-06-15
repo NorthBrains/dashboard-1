@@ -15,13 +15,25 @@ spark = SparkSession \
 spark.sparkContext.setLogLevel("ERROR")
 
 #Data Schema
-flat_schema = StructType([
+schema = StructType([
+    StructField("customer_id", IntegerType(), nullable=False),
+    StructField("age", IntegerType(), nullable=False),
+    StructField("gender", StringType(), nullable=False),
+    StructField("item_purchased", StringType(), nullable=False),
     StructField("category", StringType(), nullable=False),
-    StructField("subcategories", StringType(), nullable=False),
-    StructField("product", StringType(), nullable=False),
-    StructField("id", IntegerType(), nullable=False),
-	StructField("quantity", IntegerType(), nullable=True),
-    StructField("timestamp", StringType(), nullable=True)
+    StructField("purchase_amount_usd", FloatType(), nullable=False),
+    StructField("location", StringType(), nullable=False),
+    StructField("size", StringType(), nullable=False),
+    StructField("color", StringType(), nullable=False),
+    StructField("season", StringType(), nullable=False),
+    StructField("review_rating", FloatType(), nullable=False),
+    StructField("subscription_status", StringType(), nullable=False),
+    StructField("shipping_type", StringType(), nullable=False),
+    StructField("discount_applied", StringType(), nullable=False),
+    StructField("promo_code_used", StringType(), nullable=False),
+    StructField("previous_purchases", IntegerType(), nullable=False),
+    StructField("payment_method", StringType(), nullable=False),
+    StructField("frequency_of_purchases", StringType(), nullable=False)
 ])
 
 kafka_df = spark \
