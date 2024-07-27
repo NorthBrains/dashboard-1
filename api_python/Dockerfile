@@ -19,4 +19,4 @@ RUN service cron start
 
 USER 1001
 
-ENTRYPOINT ["/scripts/start_scripts.sh"]
+ENTRYPOINT ["bash", "-c", "/scripts/start_scripts.sh"]
