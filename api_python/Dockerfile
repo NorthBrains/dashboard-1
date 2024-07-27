@@ -10,13 +10,15 @@ RUN chown -R appuser:appuser /scripts
 
 COPY ./scripts /scripts
 
+RUN chmod +x /scripts/start_scripts.sh
 RUN chmod 755 /scripts/requirements.txt \
      /scripts/sales_script.py /scripts/warehouse_script.py \
-     /scripts/clean_log.sh /scripts/start_scripts.sh
+     /scripts/clean_log.sh /scripts/start_scripts.sh \
+
 RUN pip install -r /scripts/requirements.txt
 RUN echo "0 0 */5 * * /scripts/clean_log.sh" >> /etc/crontab
 RUN service cron start
 
 USER 1001
 
-ENTRYPOINT ["bash", "-c", "/scripts/start_scripts.sh"]
+ENTRYPOINT ["/bin/bash", "/scripts/start_scripts.sh"]
