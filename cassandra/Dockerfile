@@ -7,10 +7,12 @@ RUN mkdir /initdb
 
 COPY ./init_db /initdb
 
-RUN touch /etc/crontab /etc/cron.*/*
-
 RUN chmod 755 /initdb/init.sh /initdb/init.cql /initdb/cron_del_data.sh
-RUN (crontab -l ; echo "*/45 * * * * /initdb/cron_del_data.sh >> /initdb/cron_del_data.log 2>&1") | crontab -
+RUN echo "*/45 * * * * /initdb/cron_del_data.sh >> /initdb/cron_del_data.log 2>&1" > /etc/cron.d/cron_del_data
+RUN chmod 0644 /etc/cron.d/cron_del_data
+RUN crontab /etc/cron.d/cron_del_data
+RUN touch /var/log/cron.log
+RUN service cron start
 
 EXPOSE 7000 9042
 
