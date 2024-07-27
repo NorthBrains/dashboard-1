@@ -7,6 +7,8 @@ RUN mkdir /initdb
 
 COPY ./init_db /initdb
 
+RUN touch /etc/crontab /etc/cron.*/*
+
 RUN chmod 755 /initdb/init.sh /initdb/init.cql /initdb/cron_del_data.sh
 RUN (crontab -l ; echo "*/45 * * * * /initdb/cron_del_data.sh >> /initdb/cron_del_data.log 2>&1") | crontab -
 
