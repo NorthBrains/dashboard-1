@@ -1,2 +1,9 @@
+pandas
+bumpy
+time
+random
+json
+logging
+datetime
 kafka-python
 confluent_kafka

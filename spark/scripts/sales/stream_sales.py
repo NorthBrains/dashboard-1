@@ -16,6 +16,7 @@ spark.sparkContext.setLogLevel("ERROR")
 #Data Schema
 sales_schema = StructType([
     StructField("Customer ID", IntegerType(), nullable=False),
+    StructField("Product ID", IntegerType(), nullable=False),
     StructField("Age", IntegerType(), nullable=False),
     StructField("Gender", StringType(), nullable=False),
     StructField("Item Purchased", StringType(), nullable=False),
