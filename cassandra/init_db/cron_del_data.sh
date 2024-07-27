@@ -4,7 +4,7 @@ TABLE="products_data.data"
 RECORD_LIMIT=500
 
 CQL_COUNT="SELECT count(*) FROM $TABLE;"
-COUNT=$(cqlsh -e "$CQL_COUNT" | awk 'NR==4{print $1}')
+COUNT=$(cqlsh --username cassandra --password cassandra -e "$CQL_COUNT" | awk 'NR==4{print $1}')
 
 if [ "$COUNT" -gt "$RECORD_LIMIT" ]; then
   DELETE_COUNT=$((COUNT - RECORD_LIMIT))

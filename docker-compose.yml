@@ -20,9 +20,10 @@ services:
       dashboard_one:
         ipv4_address: 172.30.0.2
 
-  spark_worker_one:
+  #SALES stream
+  spark_worker_first_one:
     image: bitnami/spark:3.5.1
-    container_name: spark_worker_one
+    container_name: spark_worker_first_one
     environment:
       SPARK_MODE: worker
       SPARK_MASTER_URL: spark://172.30.0.2:7077
@@ -33,10 +34,29 @@ services:
       SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED: no
       SPARK_SSL_ENABLED: no
     volumes:
-      - ./spark/scripts:/opt/bitnami/spark/scripts
+      - ./spark/scripts/sales:/opt/bitnami/spark/scripts
     networks:
       dashboard_one:
         ipv4_address: 172.30.0.3
+
+  #WAREHOUSE stream
+  spark_worker_second_one:
+    image: bitnami/spark:3.5.1
+    container_name: spark_worker_second_one
+    environment:
+      SPARK_MODE: worker
+      SPARK_MASTER_URL: spark://172.30.0.2:7077
+      SPARK_WORKER_CORES: 1
+      SPARK_WORKER_MEMORY: 1G
+      SPARK_RPC_AUTHENTICATION_ENABLED: no
+      SPARK_RPC_ENCRYPTION_ENABLED: no
+      SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED: no
+      SPARK_SSL_ENABLED: no
+    volumes:
+      - ./spark/scripts/warehouse:/opt/bitnami/spark/scripts
+    networks:
+      dashboard_one:
+        ipv4_address: 172.30.0.4
 
   zookeeper_one:
     image: zookeeper:3.5.9
@@ -49,17 +69,17 @@ services:
       ZOO_PORT: 2181
     networks:
       dashboard_one:
-        ipv4_address: 172.30.0.4
+        ipv4_address: 172.30.0.5
 
-  kafka_one:
+  kafka_first_one:
     image: confluentinc/cp-kafka:7.5.0
-    container_name: kafka_one
+    container_name: kafka_first_one
     ports:
       - "9092:9092"
     environment:
       KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 172.30.0.4:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.30.0.5:9092
+      KAFKA_ZOOKEEPER_CONNECT: 172.30.0.5:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.30.0.6:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_LOG_RETENTION_MS: 86400000 #1 day in milliseconds
       KAFKA_LOG_CLEANUP_POLICY: delete
@@ -69,7 +89,47 @@ services:
       - zookeeper_one
     networks:
       dashboard_one:
-        ipv4_address: 172.30.0.5
+        ipv4_address: 172.30.0.6
+
+  kafka_second_one:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka_second_one
+    ports:
+      - "9092:9093"
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: 172.30.0.5:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.30.0.7:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG_RETENTION_MS: 86400000 #1 day in milliseconds
+      KAFKA_LOG_CLEANUP_POLICY: delete
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    depends_on:
+      - zookeeper_one
+    networks:
+      dashboard_one:
+        ipv4_address: 172.30.0.7
+
+  kafka_third_one:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka_third_one
+    ports:
+      - "9092:9094"
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: 172.30.0.5:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.30.0.8:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG_RETENTION_MS: 86400000 #1 day in milliseconds
+      KAFKA_LOG_CLEANUP_POLICY: delete
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    depends_on:
+      - zookeeper_one
+    networks:
+      dashboard_one:
+        ipv4_address: 172.30.0.8
 
   cassandra_one:
     build: ./cassandra
@@ -81,22 +141,25 @@ services:
     ports:
       - '9042:9042'
     volumes:
+      - ./cassandra/init_db:/initdb
       - cassandra_data:/var/lib/cassandra
       - cassandra_logs:/var/log/cassandra
     networks:
       dashboard_one:
-        ipv4_address: 172.30.0.6
+        ipv4_address: 172.30.0.9
 
   api_python:
     build: ./api_python
     container_name: api_one
     hostname: api_one
     depends_on:
-      - kafka_one
+      - kafka_first_one
+      - kafka_second_one
+      - kafka_third_one
       - zookeeper_one
     networks:
       dashboard_one:
-        ipv4_address: 172.30.0.7
+        ipv4_address: 172.30.0.10
 
   dashboard_one:
     build: ./dashboard
@@ -106,7 +169,7 @@ services:
       - "8900:5000"
     networks:
       dashboard_one:
-        ipv4_address: 172.30.0.8
+        ipv4_address: 172.30.0.11
 
 
 volumes:
