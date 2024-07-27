@@ -61,6 +61,10 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: 172.30.0.4:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.30.0.5:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_LOG_RETENTION_MS: 86400000 #1 day in milliseconds
+      KAFKA_LOG_CLEANUP_POLICY: delete
+    volumes:
+      - kafka_data:/var/lib/kafka/data
     depends_on:
       - zookeeper_one
     networks:
@@ -108,6 +112,7 @@ services:
 volumes:
   cassandra_data: {}
   cassandra_logs: {}
+  kafka_data: {}
 
 networks:
   dashboard_one:

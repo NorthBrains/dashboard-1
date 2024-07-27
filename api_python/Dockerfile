@@ -2,15 +2,17 @@ FROM python:3.10
 
 USER root
 
-RUN mkdir /scripts
+RUN apt-get update && apt-get install -y cron
+RUN mkdir /scripts && chmod 755 /scripts
 
 COPY ./scripts /scripts
 
-RUN chmod 777 /scripts/requirements.txt
-RUN chmod 777 /scripts/random_data.py
-
+RUN chmod 755 /scripts/requirements.txt /scripts/random_data.py /scripts/clean_log.sh
 RUN pip install -r /scripts/requirements.txt
+RUN echo "0 0 */5 * * /scripts/clean_log.sh" >> /etc/crontab
+RUN service cron start
 
-USER 1001
+USER 1001 #non root user
 
-CMD ["python3", "/scripts/random_data.py"]
+# Set entrypoint and redirect logs
+ENTRYPOINT ["sh", "-c", "python3 /scripts/random_data.py > /scripts/random_data.log 2>&1"]
