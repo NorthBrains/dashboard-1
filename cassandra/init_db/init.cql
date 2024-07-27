@@ -1,6 +1,7 @@
 -- Create keyspace com
 CREATE KEYSPACE IF NOT EXISTS company_one WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 1};
 
+<<<<<<< HEAD
 -- Create 'warehouse_data' table in 'company_one' keyspace
 CREATE TABLE company_one.warehouse_data (
     "Warehouse ID" int,
@@ -49,4 +50,26 @@ CREATE TABLE company_one.sales_data (
     "Payment Method" text,
     "Frequency of Purchases" text,
     PRIMARY KEY ("Customer ID", "Item Purchased")
+=======
+-- Create 'shopping_trends' table in 'products_data' keyspace
+CREATE TABLE IF NOT EXISTS shopping_trends.products_data (
+    customer_id int PRIMARY KEY,
+    age int,
+    gender text,
+    item_purchased text,
+    category text,
+    purchase_amount_usd float,
+    location text,
+    size text,
+    color text,
+    season text,
+    review_rating float,
+    subscription_status text,
+    shipping_type text,
+    discount_applied text,
+    promo_code_used text,
+    previous_purchases int,
+    payment_method text,
+    frequency_of_purchases text
+>>>>>>> develop
 );
