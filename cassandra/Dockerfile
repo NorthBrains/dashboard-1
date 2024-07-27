@@ -19,4 +19,4 @@ EXPOSE 7000 9042
 USER 1001
 
 ENTRYPOINT [ "/opt/bitnami/scripts/cassandra/entrypoint.sh" ]
-CMD [ "/bin/bash", "-c", "/opt/bitnami/scripts/cassandra/run.sh && /initdb/init.sh" ]
+CMD [ "/bin/bash", "-c", "/opt/bitnami/scripts/cassandra/run.sh" ]

@@ -81,6 +81,7 @@ services:
     ports:
       - '9042:9042'
     volumes:
+      - ./cassandra/init_db:/initdb
       - cassandra_data:/var/lib/cassandra
       - cassandra_logs:/var/log/cassandra
     networks:
