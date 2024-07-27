@@ -1,4 +1,2 @@
-logging
-datetime
 kafka-python
 confluent_kafka
