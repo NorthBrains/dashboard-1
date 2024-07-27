@@ -32,6 +32,7 @@ CREATE TABLE company_one.warehouse_data (
 -- Create 'sales_data' table in 'company_one' keyspace
 CREATE TABLE company_one.sales_data (
     "Customer ID" int,
+    "Product ID" int,
     "Age" int,
     "Gender" text,
     "Item Purchased" text,
