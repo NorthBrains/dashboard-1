@@ -6,6 +6,7 @@ USER root
 
 RUN apt-get update && apt-get install -y cron
 RUN mkdir /scripts && chmod 755 /scripts
+RUN chown -R appuser:appuser /scripts
 
 COPY ./scripts /scripts
 
