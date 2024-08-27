@@ -6,34 +6,37 @@
 This project is designed to create a live data dashboard for Sales and Warehouse using a modern data streaming and processing architecture. The architecture leverages Apache Kafka for data streaming, Apache Spark for processing, Cassandra for data storage, and Plotly Dash for creating an analytical dashboard. All components are containerized using Docker to ensure easy deployment and scalability.
 </p>
 
-<h2>Architecture Overview</h2>
+<h2>Architecture Overview 🔧</h2>
 
 <ul>
     <li><strong>Python Script (Producer):</strong> Acts as the data source, sending data streams to specific Kafka topics ("Sales" and "Warehouse").</li>
     <li><strong>Kafka Cluster:</strong> Comprises three controllers and three brokers to manage and distribute the data streams. Kafka handles the initialization of topics and ensures data flows correctly through the system.</li>
     <li><strong>Apache Spark:</strong> Receives and processes the streaming data from Kafka. The Spark cluster consists of two workers and one master node, providing distributed data processing capabilities.</li>
     <li><strong>Cassandra:</strong> Stores the processed data from Spark. It offers high availability and scalability, making it ideal for real-time data storage.</li>
-    <li><strong>Plotly Dash:</strong> Provides an analytical dashboard for visualizing the data stored in Cassandra, allowing users to interact with and analyze the live data streams.</li>
+    <li><strong>Plotly Dash:</strong> Provides an analytical dashboard for visualizing the data stored in Cassandra, allowing users to interact with and analyze the live data streams. It allows us to switch between Sales and Warehouse live data.</li>
     <li><strong>Docker:</strong> All components are containerized to ensure consistent environments across different platforms and ease of deployment.</li>
 </ul>
 
 <h2>Getting Started</h2>
 
 <h3>Prerequisites</h3>
-<p>Docker and Docker Compose installed on your machine.</p>
+<p>Docker and Docker Compose installed on your machine 🐳</p>
 
 <h3>Setting Up the Environment</h3>
 
 <ol>
     <li><strong>Clone the repository:</strong>
-        <pre><code>git clone https://github.com/yourusername/sales-warehouse-dashboard.git
-cd sales-warehouse-dashboard</code></pre>
+        <pre><code>git clone git@github.com:NorthBrains/dashboard-1.git</code></pre>
     </li>
+</ol>
 
+<ol>
     <li><strong>Start the Docker containers:</strong>
         <pre><code>docker-compose up -d</code></pre>
     </li>
+</ol>
 
+<ol>
     <li><strong>Set Up Cassandra Keyspace and Tables:</strong>
         <p>After the Cassandra container is up and running, you need to create a keyspace and the required tables. Execute the following command to run the CQL script:</p>
         <pre><code>docker exec -it cassandra_one cqlsh -u cassandra -p cassandra -f /initdb/init.cql</code></pre>
