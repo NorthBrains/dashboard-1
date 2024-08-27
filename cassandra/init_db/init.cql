@@ -1,65 +1,40 @@
 -- Create keyspace com
 CREATE KEYSPACE IF NOT EXISTS company_one WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 1};
 
-<<<<<<< HEAD
--- Create 'warehouse_data' table in 'company_one' keyspace
-CREATE TABLE company_one.warehouse_data (
-    "Warehouse ID" int,
-    "Product ID" int,
-    "Product Name" text,
-    "Category" text,
-    "Quantity in Stock" double,
-    "Location" text,
-    "Supplier" text,
-    "Restock Frequency" text,
-    "Average Delivery Time (days)" double,
-    "Stock Value (USD)" double,
-    "Storage Temperature (C)" double,
-    "Shelf Life (days)" double,
-    "Hazardous Material" text,
-    "Reorder Level" double,
-    "Daily Sales (units)" double,
-    "Daily Restock (units)" double,
-    "Stock Level (units)" int,
-    "Sales Forecast (units)" int,
-    "Latitude" double,
-    "Longitude" double,
-    "State" text,
-    "timestamp" timestamp,
-    PRIMARY KEY ("Warehouse ID", "Product ID")
+CREATE TABLE IF NOT EXISTS company_one.warehouse_data (
+    warehouse_id int,
+    product_id int,
+    product_name text,
+    category text,
+    quantity_in_stock float,
+    location text,
+    supplier text,
+    restock_frequency text,
+    average_delivery_time float,
+    stock_value float,
+    storage_temperature float,
+    shelf_life float,
+    hazardous_material text,
+    reorder_level float,
+    daily_sales float,
+    daily_restock float,
+    stock_level int,
+    sales_forecast int,
+    latitude float,
+    longitude float,
+    state text,
+    timestamp text,
+    PRIMARY KEY (warehouse_id, product_id)
 );
 
--- Create 'sales_data' table in 'company_one' keyspace
-CREATE TABLE company_one.sales_data (
-    "Customer ID" int,
-    "Product ID" int,
-    "Age" int,
-    "Gender" text,
-    "Item Purchased" text,
-    "Category" text,
-    "Purchase Amount (USD)" double,
-    "Location" text,
-    "Size" text,
-    "Color" text,
-    "Season" text,
-    "Review Rating" double,
-    "Subscription Status" text,
-    "Shipping Type" text,
-    "Discount Applied" text,
-    "Promo Code Used" text,
-    "Previous Purchases" int,
-    "Payment Method" text,
-    "Frequency of Purchases" text,
-    PRIMARY KEY ("Customer ID", "Item Purchased")
-=======
--- Create 'shopping_trends' table in 'products_data' keyspace
-CREATE TABLE IF NOT EXISTS shopping_trends.products_data (
-    customer_id int PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS company_one.sales_data (
+    customer_id int,
+    product_id int,
     age int,
     gender text,
     item_purchased text,
     category text,
-    purchase_amount_usd float,
+    purchase_amount float,
     location text,
     size text,
     color text,
@@ -71,6 +46,8 @@ CREATE TABLE IF NOT EXISTS shopping_trends.products_data (
     promo_code_used text,
     previous_purchases int,
     payment_method text,
-    frequency_of_purchases text
->>>>>>> develop
+    frequency_of_purchases text,
+    timestamp text,
+    PRIMARY KEY (customer_id, item_purchased)
 );
+

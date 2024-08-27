@@ -1,4 +1,4 @@
-Warehouse ID,Product ID,Product Name,Category,Quantity in Stock,Location,Supplier,Restock Frequency,Average Delivery Time (days),Stock Value (USD),Storage Temperature (C),Shelf Life (days),Hazardous Material,Reorder Level,Daily Sales (units),Daily Restock (units),Stock Level (units),Sales Forecast (units),Latitude,Longitude,State,timestamp
+warehouse_id,product_id,product_name,category,quantity_in_stock,location,supplier,restock_frequency,average_delivery_time,stock_value,storage_temperature,shelf_life,hazardous_material,reorder_level,daily_sales,daily_restock,stock_level,sales_forecast,latitude,longitude,state,timestamp
 7,173,Laptop,Footwear,85.0,New York,Supplier A,Quarterly,2.0,802.96,20.1,152.0,No,89.0,34.0,41,406,7,40.7128,-74.006,NY,
 4,160,Sneakers,Electronics,214.0,Houston,Supplier B,Weekly,14.0,360.45,9.1,281.0,Yes,45.0,5.0,23,413,2,29.7604,-95.3698,TX,
 8,142,Sneakers,Footwear,115.0,Houston,Supplier A,Weekly,7.0,569.17,-3.6,349.0,Yes,96.0,33.0,33,189,10,29.7604,-95.3698,TX,

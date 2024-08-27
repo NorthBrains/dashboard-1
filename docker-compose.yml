@@ -1,7 +1,5 @@
-version: '3.8'
-
 services:
-  spark_master_one:
+  spark_master:
     image: bitnami/spark:3.5.1
     container_name: spark_master_one
     ports:
@@ -14,124 +12,182 @@ services:
       SPARK_RPC_ENCRYPTION_ENABLED: no
       SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED: no
       SPARK_SSL_ENABLED: no
-    volumes:
-      - ./spark/scripts:/opt/bitnami/spark/scripts
     networks:
       dashboard_one:
         ipv4_address: 172.30.0.2
 
-  #SALES stream
-  spark_worker_first_one:
-    image: bitnami/spark:3.5.1
-    container_name: spark_worker_first_one
+  spark_worker-1:
+    build: ./spark/sales
+    container_name: spark_worker-1_one
+    depends_on:
+      - cassandra
+      - spark_master
     environment:
       SPARK_MODE: worker
       SPARK_MASTER_URL: spark://172.30.0.2:7077
       SPARK_WORKER_CORES: 1
-      SPARK_WORKER_MEMORY: 1G
+      SPARK_WORKER_MEMORY: 512m
+      SPARK_DRIVER_MEMORY: 1G
+      SPARK_EXECUTOR_MEMORY: 512m
       SPARK_RPC_AUTHENTICATION_ENABLED: no
       SPARK_RPC_ENCRYPTION_ENABLED: no
       SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED: no
       SPARK_SSL_ENABLED: no
-    volumes:
-      - ./spark/scripts/sales:/opt/bitnami/spark/scripts
     networks:
       dashboard_one:
         ipv4_address: 172.30.0.3
 
-  #WAREHOUSE stream
-  spark_worker_second_one:
-    image: bitnami/spark:3.5.1
-    container_name: spark_worker_second_one
+  spark_worker-2:
+    build: ./spark/warehouse
+    container_name: spark_worker-2_one
+    depends_on:
+      - cassandra
+      - spark_master
     environment:
       SPARK_MODE: worker
       SPARK_MASTER_URL: spark://172.30.0.2:7077
       SPARK_WORKER_CORES: 1
-      SPARK_WORKER_MEMORY: 1G
+      SPARK_WORKER_MEMORY: 512m
+      SPARK_DRIVER_MEMORY: 1G
+      SPARK_EXECUTOR_MEMORY: 512m
       SPARK_RPC_AUTHENTICATION_ENABLED: no
       SPARK_RPC_ENCRYPTION_ENABLED: no
       SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED: no
       SPARK_SSL_ENABLED: no
-    volumes:
-      - ./spark/scripts/warehouse:/opt/bitnami/spark/scripts
     networks:
       dashboard_one:
         ipv4_address: 172.30.0.4
 
-  zookeeper_one:
-    image: zookeeper:3.5.9
-    container_name: zookeeper_one
-    ports:
-      - "2181:2181"
+  controller-1:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: controller-1_one
     environment:
-      ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1=172.30.0.3:2888:3888;2181
-      ZOO_PORT: 2181
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@172.30.0.5:29092,2@172.30.0.6:29092,3@172.30.0.7:29092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT
+      KAFKA_LISTENERS: CONTROLLER://172.30.0.5:29092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LOG_DIRS: "/tmp/data"
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
     networks:
       dashboard_one:
         ipv4_address: 172.30.0.5
 
-  kafka_first_one:
+  controller-2:
     image: confluentinc/cp-kafka:7.5.0
-    container_name: kafka_first_one
-    ports:
-      - "9092:9092"
+    container_name: controller-2_one
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: 172.30.0.5:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.30.0.6:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_LOG_RETENTION_MS: 86400000 #1 day in milliseconds
-      KAFKA_LOG_CLEANUP_POLICY: delete
-    volumes:
-      - kafka_data:/var/lib/kafka/data
-    depends_on:
-      - zookeeper_one
+      KAFKA_NODE_ID: 2
+      KAFKA_PROCESS_ROLES: controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@172.30.0.5:29092,2@172.30.0.6:29092,3@172.30.0.7:29092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT
+      KAFKA_LISTENERS: CONTROLLER://172.30.0.6:29092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LOG_DIRS: "/tmp/data"
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
     networks:
       dashboard_one:
         ipv4_address: 172.30.0.6
 
-  kafka_second_one:
+  controller-3:
     image: confluentinc/cp-kafka:7.5.0
-    container_name: kafka_second_one
-    ports:
-      - "9093:9092"
+    container_name: controller-3_one
     environment:
-      KAFKA_BROKER_ID: 2
-      KAFKA_ZOOKEEPER_CONNECT: 172.30.0.5:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.30.0.7:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_LOG_RETENTION_MS: 86400000 #1 day in milliseconds
-      KAFKA_LOG_CLEANUP_POLICY: delete
-    volumes:
-      - kafka_data:/var/lib/kafka/data
-    depends_on:
-      - zookeeper_one
+      KAFKA_NODE_ID: 3
+      KAFKA_PROCESS_ROLES: controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@172.30.0.5:29092,2@172.30.0.6:29092,3@172.30.0.7:29092"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT
+      KAFKA_LISTENERS: CONTROLLER://172.30.0.7:29092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LOG_DIRS: "/tmp/data"
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
     networks:
       dashboard_one:
         ipv4_address: 172.30.0.7
 
-  kafka_third_one:
+  broker-1:
     image: confluentinc/cp-kafka:7.5.0
-    container_name: kafka_third_one
+    container_name: broker-1_one
     ports:
-      - "9094:9092"
-    environment:
-      KAFKA_BROKER_ID: 3
-      KAFKA_ZOOKEEPER_CONNECT: 172.30.0.5:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.30.0.8:9092
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_LOG_RETENTION_MS: 86400000 #1 day in milliseconds
-      KAFKA_LOG_CLEANUP_POLICY: delete
-    volumes:
-      - kafka_data:/var/lib/kafka/data
+      - "9092:9092"
+      - "29092:29092"
     depends_on:
-      - zookeeper_one
+    - controller-1
+    - controller-2
+    - controller-3
+    environment:
+      KAFKA_BROKER_ID: 4
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_LISTENERS: PLAINTEXT://172.30.0.8:9092,PLAINTEXT_HOST://0.0.0.0:29092
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@172.30.0.5:29092,2@172.30.0.6:29092,3@172.30.0.7:29092"
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.30.0.8:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LOG_DIRS: "/tmp/data"
+      KAFKA_PROCESS_ROLES: broker
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LOG_RETENTION_MS: 86400000 # 1 day in milliseconds
+      KAFKA_LOG_CLEANUP_POLICY: delete
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
     networks:
       dashboard_one:
         ipv4_address: 172.30.0.8
 
-  cassandra_one:
+  broker-2:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: broker-2_one
+    ports:
+      - "9093:9092"
+      - "29093:29093"
+    depends_on:
+    - controller-1
+    - controller-2
+    - controller-3
+    environment:
+      KAFKA_BROKER_ID: 5
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_LISTENERS: PLAINTEXT://172.30.0.9:9092,PLAINTEXT_HOST://0.0.0.0:29093
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@172.30.0.5:29092,2@172.30.0.6:29092,3@172.30.0.7:29092"
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.30.0.9:9092,PLAINTEXT_HOST://localhost:29093
+      KAFKA_LOG_DIRS: "/tmp/data"
+      KAFKA_PROCESS_ROLES: broker
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LOG_RETENTION_MS: 86400000 # 1 day in milliseconds
+      KAFKA_LOG_CLEANUP_POLICY: delete
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+    networks:
+      dashboard_one:
+        ipv4_address: 172.30.0.9
+
+  broker-3:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: broker-3_one
+    ports:
+      - "9094:9092"
+      - "29094:29094"
+    depends_on:
+    - controller-1
+    - controller-2
+    - controller-3
+    environment:
+      KAFKA_BROKER_ID: 6
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT"
+      KAFKA_LISTENERS: PLAINTEXT://172.30.0.10:9092,PLAINTEXT_HOST://0.0.0.0:29094
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@172.30.0.5:29092,2@172.30.0.6:29092,3@172.30.0.7:29092"
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://172.30.0.10:9092,PLAINTEXT_HOST://localhost:29094
+      KAFKA_LOG_DIRS: "/tmp/data"
+      KAFKA_PROCESS_ROLES: broker
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LOG_RETENTION_MS: 86400000 # 1 day in milliseconds
+      KAFKA_LOG_CLEANUP_POLICY: delete
+      CLUSTER_ID: "MkU3OEVBNTcwNTJENDM2Qk"
+    networks:
+      dashboard_one:
+        ipv4_address: 172.30.0.10
+
+  cassandra:
     build: ./cassandra
     container_name: cassandra_one
     hostname: cassandra_one
@@ -146,20 +202,19 @@ services:
       - cassandra_logs:/var/log/cassandra
     networks:
       dashboard_one:
-        ipv4_address: 172.30.0.9
+        ipv4_address: 172.30.0.11
 
   api_python:
-    build: ./api_python
+    build: ./api
     container_name: api_one
     hostname: api_one
     depends_on:
-      - kafka_first_one
-      - kafka_second_one
-      - kafka_third_one
-      - zookeeper_one
+      - broker-1
+      - broker-2
+      - broker-3
     networks:
       dashboard_one:
-        ipv4_address: 172.30.0.10
+        ipv4_address: 172.30.0.12
 
   dashboard_one:
     build: ./dashboard
@@ -169,13 +224,49 @@ services:
       - "8900:5000"
     networks:
       dashboard_one:
-        ipv4_address: 172.30.0.11
+        ipv4_address: 172.30.0.13
 
+  # schema-registry:
+  #   image: confluentinc/cp-schema-registry:7.5.0
+  #   hostname: schema-registry
+  #   container_name: schema-registry_one
+  #   ports:
+  #     - "8081:8081"
+  #   environment:
+  #     SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "PLAINTEXT://172.30.0.8:9092,PLAINTEXT://172.30.0.9:9092,PLAINTEXT://172.30.0.10:9092"
+  #     SCHEMA_REGISTRY_HOST_NAME: "schema-registry"
+  #     SCHEMA_REGISTRY_LISTENERS: "http://172.30.0.14:8081"
+  #   networks:
+  #     dashboard_one:
+  #       ipv4_address: 172.30.0.14
+
+  init-kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: init-topics_one
+    depends_on:
+      - broker-1
+      - broker-2
+      - broker-3
+    networks:
+      dashboard_one:
+        ipv4_address: 172.30.0.153
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      # blocks until kafka is reachable
+      /bin/kafka-topics --bootstrap-server 172.30.0.8:9092,172.30.0.9:9092,172.30.0.10:9092 --list
+
+      echo -e 'Creating kafka topics'
+      /bin/kafka-topics --create --topic sales --bootstrap-server 172.30.0.8:9092,172.30.0.9:9092,172.30.0.10:9092 --partitions 3 --replication-factor 3
+      /bin/kafka-topics --create --topic warehouse --bootstrap-server 172.30.0.8:9092,172.30.0.9:9092,172.30.0.10:9092 --partitions 3 --replication-factor 3
+
+      echo -e 'Successfully created the following topics:'
+      /bin/kafka-topics --bootstrap-server 172.30.0.8:9092,172.30.0.9:9092,172.30.0.10:9092 --list
+      "   
 
 volumes:
   cassandra_data: {}
   cassandra_logs: {}
-  kafka_data: {}
 
 networks:
   dashboard_one:

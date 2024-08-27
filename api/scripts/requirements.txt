@@ -1,0 +1,9 @@
+kafka-python
+confluent_kafka
+pandas
+urllib3
+requests
+confluent-kafka[avro]
+avro-python3
+fastavro
+jsonschema
