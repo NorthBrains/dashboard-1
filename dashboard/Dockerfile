@@ -6,9 +6,7 @@ RUN mkdir /scripts
 
 COPY ./scripts /scripts
 
-RUN chmod 777 /scripts/requirements.txt
-RUN chmod 777 /scripts/dashboard.py
-
+RUN chmod 755 /scripts/requirements.txt /scripts/dashboard.py
 RUN pip install -r /scripts/requirements.txt
 
 USER 1001
