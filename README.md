@@ -40,7 +40,7 @@ This project is designed to create a live data dashboard for Sales and Warehouse
 </li>
 
 <h3>Accessing the Dashboard</h3>
-<p>Once all services are up and running, you can access the Plotly Dash dashboard by navigating to <a href="http://localhost:8050">http://localhost:8050</a> in your web browser.</p>
+<p>Once all services are up and running, you can access the Plotly Dash dashboard by navigating to <a href="http://localhost:8900">http://localhost:8900</a> in your web browser.</p>
 
 <h3>Stopping the Environment</h3>
 <p>To stop and remove all running containers, execute:</p>
