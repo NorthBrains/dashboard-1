@@ -24,25 +24,20 @@ This project is designed to create a live data dashboard for Sales and Warehouse
 
 <h3>Setting Up the Environment</h3>
 
-<ol>
-    <li><strong>Clone the repository:</strong>
-        <pre><code>git clone git@github.com:NorthBrains/dashboard-1.git</code></pre>
-    </li>
-</ol>
+<li><strong>Clone the repository:</strong>
+    <pre><code>git clone git@github.com:NorthBrains/dashboard-1.git</code></pre>
+</li>
 
-<ol>
-    <li><strong>Start the Docker containers:</strong>
-        <pre><code>docker-compose up -d</code></pre>
-    </li>
-</ol>
 
-<ol>
-    <li><strong>Set Up Cassandra Keyspace and Tables:</strong>
+<li><strong>Start the Docker containers:</strong>
+    <pre><code>docker-compose up -d</code></pre>
+</li>
+
+<li><strong>Set Up Cassandra Keyspace and Tables:</strong>
         <p>After the Cassandra container is up and running, you need to create a keyspace and the required tables. Execute the following command to run the CQL script:</p>
         <pre><code>docker exec -it cassandra_one cqlsh -u cassandra -p cassandra -f /initdb/init.cql</code></pre>
         <p>This command initializes the database with the required schema, which will be used by the Spark processing and Dash visualization.</p>
-    </li>
-</ol>
+</li>
 
 <h3>Accessing the Dashboard</h3>
 <p>Once all services are up and running, you can access the Plotly Dash dashboard by navigating to <a href="http://localhost:8050">http://localhost:8050</a> in your web browser.</p>
