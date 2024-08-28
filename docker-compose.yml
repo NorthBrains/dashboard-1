@@ -22,6 +22,7 @@ services:
     depends_on:
       - cassandra
       - spark_master
+      - init-cassandra
     environment:
       SPARK_MODE: worker
       SPARK_MASTER_URL: spark://172.30.0.2:7077
@@ -43,6 +44,7 @@ services:
     depends_on:
       - cassandra
       - spark_master
+      - init-cassandra
     environment:
       SPARK_MODE: worker
       SPARK_MASTER_URL: spark://172.30.0.2:7077
@@ -188,7 +190,7 @@ services:
         ipv4_address: 172.30.0.10
 
   cassandra:
-    build: ./cassandra
+    image: bitnami/cassandra:4.1.5
     container_name: cassandra_one
     hostname: cassandra_one
     environment:
@@ -197,7 +199,6 @@ services:
     ports:
       - '9042:9042'
     volumes:
-      - ./cassandra/init_db:/initdb
       - cassandra_data:/var/lib/cassandra
       - cassandra_logs:/var/log/cassandra
     networks:
@@ -226,19 +227,6 @@ services:
       dashboard_one:
         ipv4_address: 172.30.0.13
 
-  # schema-registry:
-  #   image: confluentinc/cp-schema-registry:7.5.0
-  #   hostname: schema-registry
-  #   container_name: schema-registry_one
-  #   ports:
-  #     - "8081:8081"
-  #   environment:
-  #     SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: "PLAINTEXT://172.30.0.8:9092,PLAINTEXT://172.30.0.9:9092,PLAINTEXT://172.30.0.10:9092"
-  #     SCHEMA_REGISTRY_HOST_NAME: "schema-registry"
-  #     SCHEMA_REGISTRY_LISTENERS: "http://172.30.0.14:8081"
-  #   networks:
-  #     dashboard_one:
-  #       ipv4_address: 172.30.0.14
 
   init-kafka:
     image: confluentinc/cp-kafka:7.5.0
@@ -249,7 +237,7 @@ services:
       - broker-3
     networks:
       dashboard_one:
-        ipv4_address: 172.30.0.153
+        ipv4_address: 172.30.0.14
     entrypoint: [ '/bin/sh', '-c' ]
     command: |
       "
@@ -263,6 +251,17 @@ services:
       echo -e 'Successfully created the following topics:'
       /bin/kafka-topics --bootstrap-server 172.30.0.8:9092,172.30.0.9:9092,172.30.0.10:9092 --list
       "   
+
+  init-cassandra:
+    build: ./cassandra/init-cassandra
+    container_name: init-cassandra_one
+    hostname: init-cassandra_one
+    depends_on:
+    - cassandra
+    networks:
+      dashboard_one:
+        ipv4_address: 172.30.0.15
+
 
 volumes:
   cassandra_data: {}
