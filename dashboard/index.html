@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+=    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tytuł strony wyświetlany na karcie przeglądarki -->
+    <title>Dashboard with Flask and Dash</title>
+    <!-- Wewnętrzny blok, definiuje wygląd elementów na stronie -->
+    <style>
+        /* Ustawienia dla dokumentu */
+        body {
+            font-family: Arial, sans-serif; /* Czcionka dla całego dokumentu */
+            margin: 0; /* Usunięcie domyślnych marginesów wokół strony */
+            padding: 20px; /* Dodanie odstępu wewnętrznego wokół zawartości strony */
+            background-color: #f4f4f4; /* Ustawienie jasnoszarego tła strony */
+        }
+        /* Styl dla nagłówka strony */
+        h1 {
+            text-align: center; /* Wyśrodkowanie tekstu nagłówka */
+            margin-bottom: 20px; /* Dodanie odstępu poniżej nagłówka */
+        }
+        /* Styl dla elementu iframe z osadzonym dashboardem */
+        .dashboard {
+            width: 100%; /* Szerokość iframe dostosowuje się do szerokości strony */
+            height: 1200px; /* Ustawienie wysokości iframe na 1200 pikseli */
+            border: none; /* Usunięcie obramowania wokół iframe */
+        }
+    </style>
+</head>
+<body>
+    <!-- Nagłówek strony wyświetlany na środku -->
+    <h1>Dashboard Sales</h1>
+    <!-- Osadzony element iframe, który ładuje zawartość z aplikacji Dash pod adresem /dashboard/ -->
+    <iframe src="/dashboard/" class="dashboard"></iframe>
+</body>
+</html>
