@@ -10,7 +10,7 @@ COPY ./scripts /scripts
 COPY ./data /data
 COPY scripts/libs /libs
 
-RUN chmod 777 /scripts/requirements.txt /scripts/app.py /data/* /libs/*
+RUN chmod 777 /scripts/requirements.txt /scripts/app_warehouse.py /data/* /libs/*
 RUN pip install -r /scripts/requirements.txt
 
 EXPOSE 5000

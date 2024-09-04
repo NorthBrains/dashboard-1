@@ -3,7 +3,7 @@ from dash import Dash, dcc, html, Input, Output
 import json
 import plotly.express as px
 
-#Cassandra connector for sales_data
+#Cassandra connector for warehouse_data
 from libs.warehouse_data import continuous_fetch_warehouse
 
 server = Flask(__name__)
