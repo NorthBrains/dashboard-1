@@ -199,7 +199,7 @@ services:
     ports:
       - '9042:9042'
     volumes:
-      - cassandra_data:/var/lib/cassandra
+      - cassandra_data:/var/libs/cassandra
       - cassandra_logs:/var/log/cassandra
     networks:
       dashboard_one:
@@ -217,15 +217,13 @@ services:
       dashboard_one:
         ipv4_address: 172.30.0.12
 
-  dashboard_one:
-    build: ./dashboard
-    container_name: dashboard_one
-    hostname: dashboard_one
-    ports:
-      - "8900:5000"
-    networks:
-      dashboard_one:
-        ipv4_address: 172.30.0.13
+#  dashboard:
+#    build: ./dashboard
+#    container_name: dashboard_one
+#    hostname: dashboard_one
+#    networks:
+#      dashboard_one:
+#        ipv4_address: 172.30.0.13
 
 
   init-kafka:
